@@ -1,0 +1,432 @@
+swagger: '2.0'
+info:
+    title: Bank Argent API documentation
+    description: Contains all available API endpoints in this codebase
+    version: '1.0.0'
+    termsOfService: 'http://swagger.io/terms/'
+host: localhost:3001
+basePath: /api/v1
+schemes:
+    - http
+paths:
+    /user/login:
+        post:
+            tags:
+                - User Module
+            summary: Login
+            description: API for Login
+            parameters:
+                - in: body
+                  name: body
+                  description: Login Payload
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Login'
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Login Successfully
+                    schema:
+                        $ref: '#/definitions/LoginResponse'
+                '400':
+                    description: Invalid Fields
+                '404':
+                    description: Invalid Path
+                '500':
+                    description: Internal Server Error
+    /user/signup:
+        post:
+            tags:
+                - User Module
+            summary: Signup
+            description: API for Signup
+            parameters:
+                - in: body
+                  name: body
+                  description: Signup Payload
+                  required: true
+                  schema:
+                      $ref: '#/definitions/User'
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Signup Successfully
+                    schema:
+                        $ref: '#/definitions/UserResponse'
+                '400':
+                    description: Invalid Fields
+                '404':
+                    description: Invalid Path
+                '500':
+                    description: Internal Server Error
+    /user/profile:
+        get:
+            security:
+                - Bearer: []
+            tags:
+                - User Module
+            summary: User Profile API
+            description: API for fetching a user profile
+            parameters:
+                - in: header
+                  type: string
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  required: true
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: User profile retrieved successully
+                    schema:
+                        $ref: '#/definitions/UserResponse'
+                '400':
+                    description: Invalid Fields
+                '401':
+                    description: Invalid Token
+                '404':
+                    description: Invalid Path
+                '500':
+                    description: Internal Server Error
+        put:
+            security:
+                - Bearer: []
+            tags:
+                - User Module
+            summary: User Profile API
+            description: API for updating a user profile
+            parameters:
+                - in: header
+                  type: string
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  required: true
+                - in: body
+                  name: body
+                  description: Update user profile attributes
+                  required: true
+                  schema:
+                      $ref: '#/definitions/UserProfile'
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: User profile retrieved successully
+                    schema:
+                        $ref: '#/definitions/UserResponse'
+                '400':
+                    description: Invalid Fields
+                '401':
+                    description: Invalid Token
+                '404':
+                    description: Invalid Path
+                '500':
+                    description: Internal Server Error
+    /accounts:
+        get:
+            security:
+                - Bearer: []
+            tags:
+                - 'Account Module'
+            summary: 'Find all user accounts'
+            description: 'API for fetching all user account'
+            produces:
+                - 'application/json'
+            parameters:
+                - in: header
+                  type: string
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  required: true
+            responses:
+                '200':
+                    description: 'User accounts retrieved sucessfully'
+                    schema:
+                        $ref: '#/definitions/AccountsResponse'
+                '400':
+                    description: Invalid Fields
+                '401':
+                    description: Invalid Token
+                '404':
+                    description: Invalid Path
+                '500':
+                    description: Internal Server Error
+    /accounts/{accountId}:
+        get:
+            security:
+                - Bearer: []
+            tags:
+                - 'Account Module'
+            summary: 'Find account by ID'
+            description: 'API for fetching a single user account'
+            produces:
+                - 'application/json'
+            parameters:
+                - in: header
+                  type: string
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  required: true
+                - name: 'accountId'
+                  in: 'path'
+                  description: 'Id of the account'
+                  required: true
+                  type: 'string'
+            responses:
+                '200':
+                    description: 'User account retrieved sucessfully'
+                    schema:
+                        $ref: '#/definitions/AccountResponse'
+                '400':
+                    description: Invalid Fields
+                '401':
+                    description: Invalid Token
+                '404':
+                    description: Invalid Path
+                '500':
+                    description: Internal Server Error
+    /transactions:
+        get:
+            security:
+                - Bearer: []
+            tags:
+                - 'Transaction Module'
+            summary: 'Find account transactions'
+            description: 'API for fetching all transaction of an account based on token'
+            produces:
+                - 'application/json'
+            parameters:
+                - in: header
+                  type: string
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  required: true
+                - name: 'date'
+                  in: 'query'
+                  type: string
+                  description: The date on which to retrieve the transactions of the month
+            responses:
+                '200':
+                    description: 'Transactions retrieved sucessfully'
+                    schema:
+                        $ref: '#/definitions/TransactionsResponse'
+                '400':
+                    description: Invalid Fields
+                '401':
+                    description: Invalid Token
+                '403':
+                    description: Access Denied
+                '404':
+                    description: Invalid Path
+                '500':
+                    description: Internal Server Error
+    /transactions/{transactionId}:
+        get:
+            security:
+                - Bearer: []
+            tags:
+                - 'Transaction Module'
+            summary: 'Find transaction by ID'
+            description: 'API for fetching a single transaction'
+            produces:
+                - 'application/json'
+            parameters:
+                - in: header
+                  type: string
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  required: true
+                - name: 'transactionId'
+                  in: 'path'
+                  description: 'Id of the transaction'
+                  required: true
+                  type: 'string'
+            responses:
+                '200':
+                    description: 'Transaction retrieved sucessfully'
+                    schema:
+                        $ref: '#/definitions/TransactionResponse'
+                '400':
+                    description: Invalid Fields
+                '401':
+                    description: Invalid Token
+                '403':
+                    description: Access Denied
+                '404':
+                    description: Invalid Path
+                '500':
+                    description: Internal Server Error
+        put:
+            security:
+                - Bearer: []
+            tags:
+                - 'Transaction Module'
+            summary: 'Update an existing transaction'
+            description: 'API for updating a transaction'
+            produces:
+                - 'application/json'
+            parameters:
+                - in: header
+                  type: string
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  required: true
+                - name: 'transactionId'
+                  in: 'path'
+                  description: 'Id of the transaction'
+                  required: true
+                  type: 'string'
+                - in: body
+                  name: body
+                  description: Update transaction attributes
+                  required: true
+                  schema:
+                      $ref: '#/definitions/TransactionDetail'
+            responses:
+                '200':
+                    description: 'Transaction retrieved sucessfully'
+                    schema:
+                        $ref: '#/definitions/TransactionResponse'
+                '400':
+                    description: Invalid Fields
+                '401':
+                    description: Invalid Token
+                '403':
+                    description: Access Denied
+                '404':
+                    description: Invalid Path
+                '500':
+                    description: Internal Server Error
+securityDefinitions:
+    Bearer:
+        type: apiKey
+        name: Authorization
+        in: header
+definitions:
+    User:
+        properties:
+            email:
+                type: string
+                description: user email
+            password:
+                type: string
+                description: user password
+            firstName:
+                type: string
+                description: user first name
+            lastName:
+                type: string
+                description: user last name
+    Login:
+        properties:
+            email:
+                type: string
+                description: user email
+            password:
+                type: string
+                description: user password
+    UserResponse:
+        type: object
+        properties:
+            status:
+                type: integer
+            message:
+                type: string
+            body:
+                type: object
+                properties:
+                    id:
+                        type: string
+                    email:
+                        type: string
+    AccountsResponse:
+        type: object
+        properties:
+            status:
+                type: integer
+            message:
+                type: string
+            body:
+                type: array
+                items:
+                    $ref: '#/definitions/Account'
+    AccountResponse:
+        type: object
+        properties:
+            status:
+                type: integer
+            message:
+                type: string
+            body:
+                $ref: '#/definitions/Account'
+    TransactionsResponse:
+        type: object
+        properties:
+            status:
+                type: integer
+            message:
+                type: string
+            body:
+                type: array
+                items:
+                    $ref: '#/definitions/Transaction'
+    TransactionResponse:
+        type: object
+        properties:
+            status:
+                type: integer
+            message:
+                type: string
+            body:
+                $ref: '#/definitions/Transaction'
+    LoginResponse:
+        type: object
+        properties:
+            token:
+                type: string
+    UserProfile:
+        type: object
+        properties:
+            firstName:
+                type: string
+            lastName:
+                type: string
+    Account:
+        type: object
+        properties:
+            id:
+                type: string
+            description:
+                type: string
+            amount:
+                type: number
+    Transaction:
+        type: object
+        properties:
+            id:
+                type: string
+            accountId:
+                type: string
+            date:
+                type: string
+            description:
+                type: string
+            amount:
+                type: number
+            balance:
+                type: number
+            type:
+                type: string
+            category:
+                type: string
+            notes:
+                type: string
+    TransactionDetail:
+        type: object
+        properties:
+            category:
+                type: string
+            notes:
+                type: string
